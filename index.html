@@ -1,585 +1,400 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Créditos PS Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento com PIX</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #FFFFFF;
-            box-sizing: border-box;
+            background-color: #F0F1F5;
         }
-
-        .toolbar {
-            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
-            padding: 0;
-            box-sizing: border-box;
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #F0F1F5;
+            align-items: center;
+            justify-content: center;
         }
-
-        .toolbar .header {
+        .header {
             display: flex;
             align-items: center;
-            padding: 0;
-        }
-
-        .header .logo {
-            display: flex;
-            align-items: center;
-            margin-right: 10px;
-        }
-
-        .header .logo img {
-            padding: 5px;
-            width: 40px;
-            margin-right: -2.5px;
-        }
-
-        .header .title,
-        .header .powered-by {
-            text-align: left;
-            margin-top: -12px;
-        }
-
-        .header .title {
-            font-size: 30px;
-            font-weight: bold;
-            color: #FFFFFF;
-            white-space: nowrap;
-        }
-
-        .header .powered-by {
-            font-size: 16px;
-            color: #FFFFFF;
-            white-space: nowrap;
-        }
-
-        .header .profile {
-            flex-grow: 1;
-            text-align: right;
-        }
-
-        .header .profile img {
-            max-height: 200px;
-            object-fit: cover;
-        }
-
-        .toolbar-options {
-            background-color: #FFFFFF;
-            display: flex;
-            padding: 0;
-            margin: 0;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            box-sizing: border-box;
-            margin-top: -3px;
-        }
-
-        .toolbar-options .option {
-            flex: 1;
-            text-align: center;
+            justify-content: center;
             padding: 15px;
-            margin: 0;
-            font-size: 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            margin-top: 10px;
         }
-
-        .toolbar-options .option.active {
-            color: #4E75AF; /* Vermelho */
+        .header i {
+            font-size: 24px;
+            color: #424242;
+            margin-right: 8px;
+        }
+        .header span {
+            font-size: 18px;
+            color: #424242;
+        }
+        .content {
+            background-color: #FFFFFF;
+            width: 100%;
+            max-width: 600px;
+            padding-bottom: 10px;
+            border-radius: 20px;
+        }
+        .product-info {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+        .product-info i {
+            font-size: 24px;
+            color: #820AD2;
+            margin-right: 8px;
+        }
+        .product-info .product-name {
+            font-size: 18px;
             font-weight: bold;
-            border-bottom: 2px solid #4E75AF;
+            color: #424242;
+            flex-grow: 1;
         }
-
-        .toolbar-options .option.inactive {
+        .product-info .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #820CD0;
+        }
+        .divider {
+            height: 1px;
+            background-color: #F4F5F8;
+            margin: 8px 0;
+        }
+        .pay-title {
+            margin: 8px 8px 0 8px;
+            padding: 20px 0 5px 0;
+            font-size: 30px;
+            color: #212121;
+        }
+        .pay-instructions {
+            padding: 0 8px 20px 8px;
+            font-size: 20px;
+            color: #616161;
+        }
+        .qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            height: 250px;
+            position: relative;
+        }
+        .qr-code img {
+            width: 250px;
+            height: 250px;
+            margin: 0;
+            display: none;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #820AD2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transition: opacity 0.5s ease;
+            position: absolute;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .copy-button, .validate-button {
+            display: block;
+            margin: 15px auto;
+            padding: 10px 16px;
+            font-size: 18px;
+            text-align: center;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        .copy-button {
+            background: linear-gradient(90deg, #9200F4, #820AD2);
+            color: #FFFFFF;
+            display: none;
+        }
+        .copy-button:hover {
+            background-color: #6f08b1;
+        }
+        .validate-button {
+            display: none;
+            background: linear-gradient(90deg, #4E75AF, #4CAF50);
+            color: #FFFFFF;
+        }
+        .validate-button:hover {
+            background-color: #218838;
+        }
+        .instructions-title {
+            padding: 8px 26px;
+            font-size: 20px;
+            color: #424242;
+        }
+        .instructions-text {
+            padding: 4px 26px;
+            font-size: 16px;
             color: #757575;
         }
-
-        .content {
-            padding: 8px;
-        }
-
-        .content .section-title {
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #820AD2;
+            color: #fff;
             text-align: center;
-            color: #616161;
-            margin-bottom: 8px;
-        }
-
-        .container {
-            max-width: 500px;
-            background-color: #ffffff;
-            padding: 20px;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 50px;
-        }
-
-        .card {
-            margin: 10px 0;
-            padding: 15px;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .card.selected {
-            border: 2px solid #4E75AF; /* Vermelho */
-            transform: scale(1.05);
-        }
-
-        .highlight {
-            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
-            color: #FFFFFF;
-            padding: 5px 10px;
-            border-radius: 20px;
-            margin-left: 3px;
-        }
-        
-        .highlightblackfriday {
-            background: linear-gradient(90deg, #000000, #000000);
-            color: #FFFFFF;
-            padding: 5px 10px;
-            border-radius: 20px;
-            margin-left: 3px;
-        }
-
-        .title {
-            font-size: 30px;
-            color: #333333;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: #666666;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .value {
-            flex-grow: 1;
-            font-size: 20px;
-            color: #333333;
-            margin-left: 10px;
-        }
-
-        .popup {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 12px;
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding-top: 32px;
-            padding-bottom: 8px;
-            background-color: #ffffff;
-            box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.2);
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            transition: transform 0.3s ease-in-out;
-            transform: translateY(100%);
-            max-height: 50%;
-            overflow-y: auto;
-        }
-
-        .popup.active {
-            display: block;
-            transform: translateY(0);
-        }
-
-        .popup .close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .popup .summary {
-            font-size: 20px;
-            color: #616161;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .popup .total {
-            font-size: 40px;
-            color: #616161;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .popup .fee {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 16px;
-            padding: 8px;
-            color: #616161;
-            border-radius: 4px;
-            text-align: center;
-            margin-bottom: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: visibility 0s, opacity 0.5s ease-in-out;
+            opacity: 0;
+            z-index: 1000;
         }
-        
-       .popup .feeclick {
-            font-size: 15px;
-            color: #3C3B6E;
-            border-radius: 4px;
-            text-align: center;
-            margin-bottom: 8px;
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
         }
-
-        .popup .message {
-            font-size: 16px;
-            color: #616161;
-            margin: 10px 0;
-            text-align: center;
-        }
-
-        .button {
-            max-width: 350px;
-            margin: 8px 0;
-            display: block;
-            margin: 0 auto;
-            width: 100%;
-            padding: 14px;
-            text-align: center;
-            font-size: 18px;
-            color: #FFFFFF;
-            background-color: #4E75AF; /* Vermelho */
-            border: none;
+        .copy-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFFFFF;
+            border: 1px solid #212121;
+            color: #212121;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
-            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
-
-        .button:hover {
-            background-color: #4E75AF; /* Vermelho escuro */
+        .copy-code i {
+            margin-right: 10px;
         }
-
-        .cancel-button:hover {
-            background-color: #FF0000; /* Vermelho */
-        }
-
-        .bottom-button {
-            position: relative;
-            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .bottom-buttonfix {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
-      color: white;
-      text-align: center;
-      padding: 15px;
-      border-radius: 8px;
-      z-index: 100;
-    }
-
-        .cancel-button {
-            background: linear-gradient(90deg, #B22234, #FF0000); /* Vermelho e Vermelho escuro */
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .pay-button {
-            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        input[type="radio"] {
-            display: none;
-        }
-
-        .logo {
-            width: 50px;
-            height: auto;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: -12px;
-        }
-        
-         .adcard {
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    position: relative; /* Adicionado para permitir o posicionamento absoluto do ícone */
-}
-
-.adcard img {
-    width: 50px;
-    height: 50px;
-}
-
-.adcard-content {
-    width: 100%;
-}
-
-.adcard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.adcard-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333333;
-    margin-bottom: 5px;
-}
-
-.toggle-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    color: #212121;
-    transition: transform 0.3s ease;
-    position: absolute;
-    top: 20px; /* Ajuste a posição do ícone */
-    right: 20px; /* Posiciona no canto superior direito */
-}
-
-.adcard.expanded .toggle-icon {
-    transform: rotate(180deg); /* Rotaciona a seta quando expandido */
-}
-
-.adcard-text {
-    font-size: 14px;
-    color: #666666;
-    margin-bottom: 5px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    transition: all 0.3s ease;
-}
-
-.adcard.expanded .adcard-text {
-    white-space: normal;
-    text-overflow: unset;
-}
-
-.adcard-text strong {
-    color: #212121;
-}
-
-.adcard-text.green {
-    font-size: 16px;
-    color: green;
-}
-
-.adhighlight-card {
-    background-color: #f5f5f5;
-    border-left: 5px solid #3C3B6E;
-}
-.tooltip-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.toast-tooltip {
-  display: none;
-  position: absolute;
-  top: 28px; /* ajusta a posição abaixo do ícone */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 14px;
-  max-width: 240px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-}
-
-.toast-tooltip::after {
-  content: '';
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 8px;
-  border-style: solid;
-  border-color: transparent transparent #333 transparent;
-}
     </style>
 </head>
 <body>
-    <div class="toolbar">
+    <div class="container">
         <div class="header">
-            <div class="logo">
-                <img src="logo.png" alt="Logo" class="logo">
-                <div>
-                    <div class="title">Créditos</div>
-                    <div class="powered-by">Powered by Connect</div>
-                </div>
-            </div>
-            <div class="profile">
-                <img src="banner.png" alt="Profile Picture" />
-            </div>
+            <i class="fas fa-lock"></i>
+            <span>Powered by Connect</span>
         </div>
-        <div class="toolbar-options">
-            <div class="option active">Brasil</div>
-            <div class="option inactive"></div>
+        <div class="content">
+            
+        <div class="content"><br>
+       <div class="instructions-title">🚀 Novidade importante</div>
+      <div class="instructions-text">
+        Agora todas as compras em nosso site são processadas de forma <b>100% automática,</b> garantindo muito mais rapidez e praticidade para você.
+       <p>
+     ⏱️ Além disso, nosso atendimento está disponível <b>24 horas por dia, 7 dias por semana.</b>
+      <p>
+     Compre quando quiser, receba sem esperar e conte com a gente sempre que precisar! 💙
+<p>
+Atenciosamente,<br>
+Equipe Connect
+
+<p>
+	<div class="copy-code" id="shopee-btn" aria-label="Compre via Shopee">
+                <i class="fas fa-external-link-alt"></i> Entendi, continuar para o site
         </div>
     </div>
-    
-   <div class="container">
-   
-   <div class="adcard adhighlight-card">
-  <div class="adcard-content">
-    <div class="adcard-header">
-      <div class="adcard-title">
-        Seu saldo, suas regras! 🎮
-      </div>
-    </div>
-    <!-- Ícone de seta para expandir/contrair, posicionado no canto superior direito -->
-    <button class="toggle-icon" onclick="toggleCard(this)">
-      <i class="fas fa-chevron-down"></i> <!-- Ícone de seta para baixo -->
-    </button>
-    <div class="adcard-text">
-      Transforme seu saldo em diversão: conquiste jogos incríveis, desbloqueie conteúdos épicos, personalize seu perfil e viva o melhor da PlayStation Store!
-    </div>
-  </div>
 </div>
+   <p>
+    </div>
     
-    <div class="subtitle">Selecione o valor do cartão pré-pago</div>
-    <div class="card" onclick="selectCard('value35')">
-        <input type="radio" name="value" id="value35" value="35">
-        <label for="value35" class="value">R$ 35</label>
-        <span class="highlight">Mais pedido!</span>
-    </div>
-    <div class="card" onclick="selectCard('value60')">
-        <input type="radio" name="value" id="value60" value="60">
-        <label for="value60" class="value">R$ 60</label>
-    </div>   
-    <div class="card" onclick="selectCard('value100')">
-        <input type="radio" name="value" id="value100" value="100">
-        <label for="value100" class="value">R$ 100</label>
-    </div>
-    <div class="card" onclick="selectCard('value250')">
-        <input type="radio" name="value" id="value250" value="250">
-        <label for="value250" class="value">R$ 250</label>
-    </div>
-    </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Chave PIX copiada para a Área de transferência!</div>
 
-<div class="popup" id="paymentPopup">
-    <div class="summary">
-  Valor final do pedido 
-  <span class="tooltip-wrapper">
-    <i class="fas fa-question-circle info-icon" onclick="showFeeToast()"></i>
-    <div class="toast-tooltip" id="toastTooltip">
-      Para processamento e emissão do código do cartão pré-pago, incluímos uma taxa de serviço de R$ 5.
-    </div>
-  </span>
-</div>
-
-    <div class="total" id="orderTotal">R$ 20</div>      
+    <script>
+    	let WentOutToMakeThePayment = false;
     
-    <div class="fee">Ao continuar, você aceita os <a class="feeclick" href="https://connectstore.github.io/terms">Termos e Condições</a> do produto. Após concluir a compra, o Gift Card não poderá ser cancelado ou reembolsado.</div>
-
-    <button href="#" class="button pay-button" id="payButton">REALIZAR PAGAMENTO</button>
-    <button class="toggle-icon" id="cancelButton">
-     <i class="fas fa-chevron-down"></i>
-     </button>
-</div>
-
-</div>
-<button class="button bottom-buttonfix" id="continueButton">CONTINUAR</button>
-
-<script>
-	// Codigo mostrar taxa
-        function showFeeToast() {
-  const tooltip = document.getElementById("toastTooltip");
-  tooltip.style.display = "block";
-
-  setTimeout(() => {
-    tooltip.style.display = "none";
-  }, 4000); // Exibe por 4 segundos
-}
-
-    //Oculta o botão "Continuar" ao abrir a página.
-    document.getElementById('continueButton').classList.add('hidden'); // Oculta o botão "Continuar"
-    
-    selectCard("value35");
-    
-    function selectCard(cardId) {
-        document.getElementById('paymentPopup').classList.remove('active');
-        // Mostra o botão "Continuar" ao selecionar a opção
-        document.getElementById('continueButton').classList.remove('hidden'); 
-        // Remove a classe 'selected' de todos os cards
-        var cards = document.querySelectorAll('.card');
-        cards.forEach(function(card) {
-            card.classList.remove('selected');
+    	document.addEventListener("visibilitychange", function() {
+        if (document.hidden) {
+         } else {
+         if (WentOutToMakeThePayment) {
+         document.getElementById("validateButton").style.display = "block";
+          } else {}
+         }
         });
+        
+        document.getElementById("shopee-btn").addEventListener("click", function () {
+        window.open("https://connectstore.centralcart.com.br/category/playstation", "_blank");
+        });
+  
+    	document.getElementById('wpp-btn').addEventListener('click', function() {
+            sendPaymentNotification();
+        });
+        
+    	 // Função para gerar e salvar a id se ela ainda não existir ou se já tiver expirado
+function getId() {
+    const storedData = localStorage.getItem("userId");
+    
+    if (storedData) {
+        const { id, expires } = JSON.parse(storedData);
+        const now = new Date().getTime();
 
-        // Adiciona a classe 'selected' ao card clicado
-        var selectedCard = document.querySelector('input#' + cardId);
-        selectedCard.parentElement.classList.add('selected');
-        selectedCard.checked = true;
+        // Verifica se o id ainda é válido (dentro do período de 24 horas)
+        if (now < expires) {
+            return id; // Retorna o id existente
+        }
     }
 
+    // Caso contrário, gera um novo id e define o prazo de validade de 24 horas
+    const id = generateId();
+    const expires = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 horas em milissegundos
 
-    document.getElementById('continueButton').addEventListener('click', function() {
-        var selectedValue = document.querySelector('input[name="value"]:checked');
-        if (selectedValue) {
-            var value = selectedValue.value;
-            var total = parseInt(value) + 5;
-            document.getElementById('orderTotal').textContent = 'R$ ' + total;
-            document.getElementById('paymentPopup').classList.add('active');
-            document.getElementById('continueButton').classList.add('hidden'); // Oculta o botão "Continuar"
-        } else {
-            alert('Por favor, selecione um valor.');
-        }
-    });
+    // Salva o id e a data de expiração no localStorage
+    localStorage.setItem("userId", JSON.stringify({ id, expires }));
 
-    document.getElementById('cancelButton').addEventListener('click', function() {
-        document.getElementById('paymentPopup').classList.remove('active');
-        document.getElementById('continueButton').classList.remove('hidden'); // Mostra o botão "Continuar"
-    });
-    
-    // Nova forma de pagar
-    document.getElementById('payButton').addEventListener('click', function() {
-    var selectedValue = document.querySelector('input[name="value"]:checked').value;
-    var total = parseInt(selectedValue) + 5;
-    
-    // Constrói a URL de checkout corretamente
-    var checkoutUrl = "https://connectstore.github.io/checkout?payment=" + total + "&product=PS%20Store" + "&price=" + selectedValue;
-    window.location.href = checkoutUrl;
-});
-
-function toggleCard(button) {
-  const card = button.closest('.adcard');
-  card.classList.toggle('expanded');
+    return id;
 }
-</script>
 
+       let id = getId();
+
+        async function fetchPixData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const product = urlParams.get('product') || 'Produto';
+            const item = urlParams.get('item') || 'Item';
+            const price = urlParams.get('price') || '0';
+            const payment = urlParams.get('payment') || '0';
+            
+            document.querySelector('.product-name').textContent = product;
+            document.querySelector('.product-price').textContent = `R$ ${payment}`;
+
+            const description = `Pagamento do pedido ${id}`;
+            const pixUrl = `https://pix.ae?chave=43701700000116&tipo=cnpj&nome=Connect Celulares&info=${description}&valor=${payment}`;
+            
+            try {
+                const response = await fetch(pixUrl, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    document.getElementById("qrCodeImage").src = data.qrbase64;
+                    document.getElementById("copyButton").onclick = () => copyToClipboard(data.qrstring);
+                } 
+            } catch (error) {
+                console.error("Erro ao obter QR Code:", error);
+            }
+        }
+
+        function hideSpinner() {
+            const spinner = document.getElementById("spinner");
+            const qrCodeImage = document.getElementById("qrCodeImage");
+
+            spinner.style.opacity = "0";
+            setTimeout(() => {
+                spinner.style.display = "none";
+                copyButton.style.display = "block";
+                qrCodeImage.style.display = "block";
+            }, 50);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Chave PIX copiada para a área de transferência!");
+                WentOutToMakeThePayment = true;
+            }).catch(err => {
+                console.error("Erro ao copiar o código:", err);
+                showToast("Erro ao copiar chave PIX.");
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        function sendPaymentNotification() {
+       showToast("Por favor, aguarde um instante...");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const product = document.querySelector('.product-name').textContent;
+    const price = urlParams.get('price') || '0';
+    const payment = urlParams.get('payment') || '0';
+    const fee = payment - price;
+    const message = `Novo pagamento identificado #${id}\n\nDetalhes do pedido\n1x R$ ${price} (${product})\n1x R$ ${fee} (Taxa de processamento)`;
+    const botAPI = '7545115815:AAH3stNlXkfuDTu4TQH0e4CZb09Amx57oQw';
+    const chatId = '-1002469985309';
+
+    // Verifica se a notificação já foi enviada para esse ID
+    if (localStorage.getItem(`notification_${id}`) === 'true') {
+    	validatePayment();
+        // Notificação ja enviada
+        return; // Impede o envio repetido
+    }
+
+    // Enviando a mensagem via BotAPI do Telegram
+    fetch(`https://api.telegram.org/bot${botAPI}/sendMessage`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok) {
+            // Salva no localStorage que a notificação foi enviada para esse ID
+            localStorage.setItem(`notification_${id}`, 'true');
+            validatePayment();
+        } else {
+            validatePayment();
+        }
+    })
+    .catch(error => {
+        validatePayment();
+    });
+}
+
+        function validatePayment() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const product = document.querySelector('.product-name').textContent;
+        const price = urlParams.get('price') || '0';
+        const payment = urlParams.get('payment') || '0';
+        const fee = payment - price;
+        const message = `Quero validar meu pagamento
+> #${id} 
+
+Detalhes do pedido
+1x R$ ${price} (${product})
+1x R$ ${fee} (Taxa de processamento)`;
+
+        window.open(`https://wa.me/+553398801838?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    function generateId() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+    window.onload = fetchPixData;
+    </script>
 </body>
 </html>
